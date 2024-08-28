@@ -1,6 +1,6 @@
 ## 1. 下载 qemu for windows
 ## 2. 下载 xv6 source， 并修改源码：
-### 定位到xv6目录下的kernel.ld的第25行
+### 定位到xv6目录下的kernel.ld的
 ```
 .stab:{ 修改成
 .stab : AT(LOADADDR(.rodata) + SIZEOF(.rodata)){
