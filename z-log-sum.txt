@@ -1,0 +1,90 @@
+## 1. 下载 qemu for windows
+
+### 编译 xv6 source
+## 2. 下载 xv6 source， 并修改源码：
+### 定位到xv6目录下的kernel.ld的第25行
+```
+.stab:{ 修改成
+.stab : AT(LOADADDR(.rodata) + SIZEOF(.rodata)){
+```
+## 3. wsl 编译 makefile： make bochs, makefile脚本中编译出两个img文件，用于qemu启动 fs.img, xv6.img 复制*.img 文件到windows中(clion for windows, make 命令查找不到)
+
+## 4.  运行qemu： 注意路径配置：
+### qemu-system-i386 -m 512 -drive file=C:\Users\linsh\Desktop\cs-OperationSystem-main\xv6-public\fs.img,index=1,media=disk,format=raw -drive file=C:\Users\linsh\Desktop\cs-OperationSystem-main\xv6-public\xv6.img,index=0,media=disk,format=raw
+
+******************************************
+
+https://pdos.csail.mit.edu/6.828/2018/labs/lab1/
+
+### 编译 jos: gcc4.6.4 需要手动编译特定gcc,否则lab5, lab6 中的fs.h 文件被多个文件会导致无法链接
+## 1. 正确设置 qemu的 路径，配置在 lab/conf/env.mk 中
+QEMU='/mnt/c/"Program Files"/qemu/qemu-system-i386.exe'
+
+## 2. 执行make:
+
+err1: lib/spawn.c:114:42: error: taking address of packed member of ‘struct Trapframe’ may result in an unaligned pointer value [-Werror=address-of-packed-member]:
+sol1: 自定义struct未手都内存对齐，编译器报错， 对所有项目文件中的strut前加 __attribute__((packed)); python 多进程实现：打开当前目录的所有子目录，启动相应进程数执行替换任务
+sol2: src/Makefile 中加上 -Wno-address-of-packed-member
+
+*****
+err2: ld: obj/lib/libjos.a(printfmt.o): in function `printnum':
+      lib/printfmt.c:50: undefined reference to `__udivdi3'
+sol: undefined reference to __udivdi3问题: 32位系统中（目前多数系统都是，比如ARM的片子），对于普通的a除以b（b为32位）：
+                                         （1）当a为32位，Linux 内核中，常用uint32_t 类型，可以直接写为 a/b
+                                         （2）但是，对于a是64位，uint64_t的时候，就要用到专门的除操作相关的函数，linux内核里面一般为
+                                         do_div(n, base)，注意，此处do_div得到的结果是余数，而真正的a/b的结果，是用a来保存的
+     整除 和 取模运算保持数位一致
+如果你当前写代码，a/b，如果a是uint64_t类型，那么一定要利用do_div(a,b)，而得到结果a，
+而不能简单的用a/b，否则编译可以正常编译，但是最后链接最后出错，会提示上面的那个错误：
+undefined reference to "__udivdi3"
+
+*****
+err3: fs/bc.c:31: multiple definition of `super', obj/fs/ide.o:fs/ide.c:19: first defined here
+      super, bitmap multiple definition
+      multiple definition of‌错误通常发生在C或C++编程中，当同一个变量或函数在多个编译单元中被定义时，编译器会抛出“multiple definition of”错误。这种错误常见于全局变量或函数在头文件中被多次包含和定义
+sol:
+‌使用头文件保护‌：在头文件的开始和结束分别添加#ifndef、#define和#endif宏，以防止头文件内容被多次包含。例如：
+cpp
+Copy Code
+#ifndef _MY_HEADER_H_
+#define _MY_HEADER_H_
+// 头文件内容
+#endif
+‌使用extern关键字‌：在头文件中只声明变量或函数，不进行定义。在对应的源文件中使用extern关键字声明这些变量或函数，并在该源文件中进行定义。例如：
+cpp
+Copy Code
+// myheader.h
+extern int myGlobalVar;
+// myheader.cpp
+int myGlobalVar = 0;
+‌静态链接‌：使用static关键字限制变量或函数的作用域，使其仅在当前文件内有效。例如：
+cpp
+Copy Code
+// myheader.h
+static int myGlobalVar;
+‌链接依赖管理‌：确保库或模块的链接顺序正确，避免重复链接相同的符号。可以使用链接器选项如-Wl,--no-as-needed或-Wl,--whole-archive来处理。
+‌检查链接目标文件‌：使用链接器选项如-Wl,--trace或-Wl,--verbose来查看详细的链接过程，检查是否有重复的目标文件被链接。
+
+
+fs/bc, fs, serv, test 中引入头文件 fs.h, 该文件中定义 super, bitmap: 如果在多个源文件中包含了同一个头文件，而该头文件中定义了全局变量或函数，就会导致多个编译单元中存在相同的定义; 使用extern关键字
+sol 编译链接同通过： 注释 fs.h 中的 super bitmap 定义， 分别在四个文件中重新声明
+
+*****
+3. 启动qemu
+qemu-system-i386 -m 512 -drive file=C:\Users\linsh\Desktop\cs-OperationSystem-main\lab0\obj\fs\fs.img,index=1,media=disk,format=raw -drive file=C:\Users\linsh\Desktop\cs-OperationSystem-main\lab0\obj\kern\kernel.img,index=0,media=disk,format=raw
+qemu 闪烁 加载失败
+
+4. 重新fixerr3： 在fs.h 中的super bitmap 前加关键字extern; 同时只在 fs.c一个文件中重新声明 super bitmap 编译通过
+qemu-system-i386 -m 512 -drive file=C:\Users\linsh\Desktop\cs-OperationSystem-main\lab0\obj\fs\fs.img,index=1,media=disk,format=raw -drive file=C:\Users\linsh\Desktop\cs-OperationSystem-main\lab0\obj\kern\kernel.img,index=0,media=disk,format=raw
+启动成功： 可执行 shell ls cat 等命令
+
+5. lab6 成功编译 但启动qemu 报错： qemu-system-i386.exe: -redir: invalid option
+
+
+make grade num (实现测试)
+
+*******************************************
+
+### 编译 freeRTOS
+
+### 编译 linux

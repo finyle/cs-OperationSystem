@@ -1,0 +1,43 @@
+***
+*** Now run 'make gdb'.
+***
+c[?7l[2J[0mSeaBIOS (version rel-1.16.1-0-g3208b098f51a-prebuilt.qemu.org)
+
+
+iPXE (http://ipxe.org) 00:03.0 CA00 PCI2.10 PnP PMM+06FD1270+06F31270 CA00
+Press Ctrl-B to configure iPXE (PCI 00:03.0)...                                                                               
+
+
+Booting from Hard Disk..6828 decimal is 11525 octal!
+entering test_backtrace 5
+entering test_backtrace 4
+entering test_backtrace 3
+entering test_backtrace 2
+entering test_backtrace 1
+entering test_backtrace 0
+Stack backtrace:
+ebp ff010ef1  eip ff01000a  args 00000000 00000000 00000000 ff010004 ff011030
+	     	     kern/init.c:11: test_backtrace+99
+ebp ff010ef3  eip ff010007  args 00000000 00000001 ff010ef7 ff010004 ff011030
+	     	     kern/init.c:11: test_backtrace+55
+ebp ff010ef5  eip ff010007  args 00000001 00000002 ff010ef9 ff010004 ff011030
+	     	     kern/init.c:11: test_backtrace+55
+ebp ff010ef7  eip ff010007  args 00000002 00000003 ff010efb ff010004 ff011030
+	     	     kern/init.c:11: test_backtrace+55
+ebp ff010ef9  eip ff010007  args 00000003 00000004 00000000 ff010004 ff011030
+	     	     kern/init.c:11: test_backtrace+55
+ebp ff010efb  eip ff010007  args 00000004 00000005 00000000 ff010004 ff011030
+	     	     kern/init.c:11: test_backtrace+55
+ebp ff010efd  eip ff01000f  args 00000005 000011aa 00000666 00000000 00000000
+	     	     kern/init.c:33: i386_init+77
+ebp ff010eff  eip ff010003  args 00000003 00001100 00002200 00003300 00004400
+	     	     kern/entry.S:88: <unknown>+0
+leaving test_backtrace 0
+leaving test_backtrace 1
+leaving test_backtrace 2
+leaving test_backtrace 3
+leaving test_backtrace 4
+leaving test_backtrace 5
+Welcome to the JOS kernel monitor!
+Type 'help' for a list of commands.
+make[1]: *** [GNUmakefile:174: qemu-nox-gdb] Terminated

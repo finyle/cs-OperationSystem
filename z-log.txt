@@ -1,0 +1,11 @@
+lab1:
+1. make:
+err1: lib/printfmt.c:41: undefined reference to `__udivdi3'
+     ld: lib/printfmt.c:49: undefined reference to `__umoddi3
+sol: #do_div()
+
+2. 设置 conf/env.mk: QEMU=/mnt/c/"Program Files"/qemu/qemu-system-i386.exe
+make qemu
+
+https://pdos.csail.mit.edu/6.828/2018/labs/lab1/
+********************************************

@@ -1,0 +1,72 @@
+fatal: not a git repository (or any parent up to mount point /mnt)
+Stopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).
++ cc kern/init.c
++ ld obj/kern/kernel
++ mk obj/kern/kernel.img
+c[?7l[2J[0mSeaBIOS (version rel-1.16.1-0-g3208b098f51a-prebuilt.qemu.org)
+
+
+iPXE (http://ipxe.org) 00:03.0 CA00 PCI2.10 PnP PMM+06FD1270+06F31270 CA00
+Press Ctrl-B to configure iPXE (PCI 00:03.0)...                                                                               
+
+
+Booting from Hard Disk..6828 decimal is XXX octal!
+Physical memory: 113107K available, base = 664K, extended = 113043K
+check_page_free_list() succeeded!
+page_alloc: out of free memory
+page_alloc: out of free memory
+check_page_alloc() succeeded!
+page_alloc: out of free memory
+page_lookup: can not find out the page mapped at virtual address 'va'.
+page_alloc: out of free memory
+page_alloc: out of free memory
+page_alloc: out of free memory
+page_alloc: out of free memory
+page_alloc: out of free memory
+check_page() succeeded!
+check_kern_pgdir() succeeded!
+check_page_free_list() succeeded!
+check_page_installed_pgdir() succeeded!
+SMP: CPU 0 found 1 CPU(s)
+enabled interrupts: 1 2
+cpu has already startd(id): 00000000
+[00000000] new env 00001100
+[00001100] new env 00001100
+0: I am the parent!
+0: I am the child!
+1: I am the parent!
+1: I am the child!
+2: I am the parent!
+2: I am the child!
+3: I am the child!
+3: I am the parent!
+4: I am the child!
+4: I am the parent!
+5: I am the child!
+5: I am the parent!
+6: I am the child!
+6: I am the parent!
+7: I am the child!
+8: I am the child!
+7: I am the parent!
+9: I am the child!
+8: I am the parent!
+11: I am the child!
+9: I am the parent!
+11: I am the child!
+[00001100] exiting gracefully
+[00001100] free env 00001100
+11: I am the child!
+11: I am the child!
+11: I am the child!
+11: I am the child!
+11: I am the child!
+11: I am the child!
+11: I am the child!
+11: I am the child!
+[00001100] exiting gracefully
+[00001100] free env 00001100
+No runnable environments in the system!
+Welcome to the JOS kernel monitor!
+Type 'help' for a list of commands.
+make[1]: *** [GNUmakefile:313: run-dumbfork-nox-gdb] Terminated
